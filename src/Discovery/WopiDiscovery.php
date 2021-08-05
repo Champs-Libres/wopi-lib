@@ -13,7 +13,7 @@ use loophp\psr17\Psr17Interface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Client\ClientInterface;
 
-final class HttpDiscovery implements WopiDiscoveryInterface
+final class WopiDiscovery implements WopiDiscoveryInterface
 {
     private string $baseUrl;
 
