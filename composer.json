@@ -1,0 +1,35 @@
+{
+    "name": "champs-libres/wopi-lib",
+    "description": "A standard PHP library for the WOPI protocol.",
+    "keywords": [
+        "wopi"
+    ],
+    "homepage": "http://github.com/champs-libres/wopi-lib",
+    "license": "MIT",
+    "require": {
+        "php": ">= 7.4",
+        "ext-json": "*",
+        "loophp/psr-http-message-bridge-bundle": "^1",
+        "loophp/psr17": "^1.0",
+        "openlss/lib-array2xml": "^1.0",
+        "psr/cache": "^1.0.1",
+        "psr/http-client": "^1.0",
+        "psr/http-client-implementation": "^1",
+        "psr/http-factory": "^1.0.1",
+        "psr/http-factory-implementation": "^1",
+        "psr/http-message": "^1.0",
+        "psr/http-message-implementation": "^1"
+    },
+    "require-dev": {
+        "drupol/php-conventions": "^5.0",
+        "friends-of-phpspec/phpspec-code-coverage": "^6.1",
+        "nyholm/psr7": "^1.4",
+        "phpspec/phpspec": "^7.1",
+        "symfony/http-client": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "ChampsLibres\\WopiLib\\": "src/"
+        }
+    }
+}

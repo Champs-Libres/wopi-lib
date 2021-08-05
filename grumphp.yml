@@ -1,0 +1,8 @@
+imports:
+    - { resource: vendor/drupol/php-conventions/config/php73/grumphp.yml }
+
+parameters:
+    tasks.license.date_from: 2021
+    tasks.license.holder: Pol Dellaiera
+    extra_tasks:
+        phpspec: ~
