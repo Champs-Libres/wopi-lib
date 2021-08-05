@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Service\Discovery;
+namespace ChampsLibres\WopiLib\Discovery;
 
 use loophp\psr17\Psr17Interface;
 use Psr\Cache\CacheItemPoolInterface;

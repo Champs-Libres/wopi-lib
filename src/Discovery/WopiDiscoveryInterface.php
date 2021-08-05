@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Service\Discovery;
+namespace ChampsLibres\WopiLib\Discovery;
 
 interface WopiDiscoveryInterface
 {
