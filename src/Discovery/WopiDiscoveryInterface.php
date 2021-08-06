@@ -11,10 +11,9 @@ namespace ChampsLibres\WopiLib\Discovery;
 
 interface WopiDiscoveryInterface
 {
-    public function refresh(): void;
+    public function discoverExtension(string $extension): array;
 
     public function getCapabilities(): array;
 
-    public function discoverExtension(string $extension): array;
-
+    public function refresh(): void;
 }

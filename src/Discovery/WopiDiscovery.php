@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace ChampsLibres\WopiLib\Discovery;
 
 use loophp\psr17\Psr17Interface;
-use LSS\XML2Array;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Client\ClientInterface;
 use SimpleXMLElement;
@@ -25,22 +24,33 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
     private Psr17Interface $psr17;
 
-    public function __construct(array $configuration, ClientInterface $client, Psr17Interface $psr17, CacheItemPoolInterface $cache)
-    {
+    public function __construct(
+        array $configuration,
+        ClientInterface $client,
+        Psr17Interface $psr17,
+        CacheItemPoolInterface $cache
+    ) {
         $this->baseUrl = $configuration['server'];
         $this->client = $client;
         $this->psr17 = $psr17;
         $this->cache = $cache;
     }
 
-    public function refresh(): void
+    public function discoverExtension(string $extension): array
     {
-        $this->discoverRaw();
-    }
+        $discovery = $this->discover();
 
-    private function discover(): SimpleXMLElement
-    {
-        return simplexml_load_string($this->discoverRaw());
+        $extensions = [];
+
+        foreach ($discovery->xpath('//net-zone/app') as $app) {
+            $appName = (string) $app['name'];
+
+            foreach ($app->xpath(sprintf("action[@ext='%s']", $extension)) as $action) {
+                $extensions[] = array_merge(current($action->attributes()), ['name' => $appName]);
+            }
+        }
+
+        return $extensions;
     }
 
     public function getCapabilities(): array
@@ -54,20 +64,14 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         return json_decode($this->request($url), true);
     }
 
-    public function discoverExtension(string $extension): array
+    public function refresh(): void
     {
-        $discovery = $this->discover();
+        $this->discoverRaw();
+    }
 
-        $extensions = [];
-        foreach ($discovery->xpath("//net-zone/app") as $app) {
-            $appName = (string) $app['name'];
-
-            foreach ($app->xpath(sprintf("action[@ext='%s']", $extension)) as $action) {
-                $extensions[] = array_merge(current($action->attributes()), ['name' => $appName]);
-            }
-        }
-
-        return $extensions;
+    private function discover(): SimpleXMLElement
+    {
+        return simplexml_load_string($this->discoverRaw());
     }
 
     private function discoverRaw(): string
