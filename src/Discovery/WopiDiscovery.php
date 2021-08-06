@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace ChampsLibres\WopiLib\Discovery;
 
 use loophp\psr17\Psr17Interface;
+use LSS\XML2Array;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Client\ClientInterface;
 
@@ -33,20 +34,14 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
     public function discover(): array
     {
-        return json_decode(json_encode(simplexml_load_string($this->discoverRaw())), true);
+        return XML2Array::createArray($this->discoverRaw());
     }
 
     public function getCapabilities(): array
     {
-        $xml = simplexml_load_string($this->discoverRaw());
+        $discovery = $this->discover();
 
-        foreach ($xml->{'net-zone'}->app as $app) {
-            if ('getinfo' !== (string) $app->action['name']) {
-                continue;
-            }
-
-            $url = (string) $app->action['urlsrc'];
-        }
+        $url = $discovery['wopi-discovery']['net-zone']['app']['action']['@attributes']['urlsrc'];
 
         return json_decode($this->request($url), true);
     }
