@@ -43,10 +43,8 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         $extensions = [];
 
         foreach ($discovery->xpath('//net-zone/app') as $app) {
-            $appName = (string) $app['name'];
-
             foreach ($app->xpath(sprintf("action[@ext='%s']", $extension)) as $action) {
-                $extensions[] = array_merge(current($action->attributes()), ['name' => $appName]);
+                $extensions[] = array_merge(current($action->attributes()), ['name' => (string) $app['name']], ['favIconUrl' => (string) $app['favIconUrl']]);
             }
         }
 
