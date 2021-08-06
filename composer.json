@@ -10,7 +10,6 @@
         "php": ">= 7.4",
         "ext-json": "*",
         "loophp/psr17": "^1.0",
-        "openlss/lib-array2xml": "^1.0",
         "psr/cache": "^1.0.1",
         "psr/http-client": "^1.0",
         "psr/http-client-implementation": "^1",

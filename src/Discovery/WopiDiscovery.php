@@ -13,6 +13,7 @@ use loophp\psr17\Psr17Interface;
 use LSS\XML2Array;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Client\ClientInterface;
+use SimpleXMLElement;
 
 final class WopiDiscovery implements WopiDiscoveryInterface
 {
@@ -32,18 +33,41 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         $this->cache = $cache;
     }
 
-    public function discover(): array
+    public function refresh(): void
     {
-        return XML2Array::createArray($this->discoverRaw());
+        $this->discoverRaw();
+    }
+
+    private function discover(): SimpleXMLElement
+    {
+        return simplexml_load_string($this->discoverRaw());
     }
 
     public function getCapabilities(): array
     {
         $discovery = $this->discover();
 
-        $url = $discovery['wopi-discovery']['net-zone']['app']['action']['@attributes']['urlsrc'];
+        $capabilities = $discovery->xpath("//net-zone/app[@name='Capabilities']");
+
+        $url = (string) $capabilities[0]->action['urlsrc'];
 
         return json_decode($this->request($url), true);
+    }
+
+    public function discoverExtension(string $extension): array
+    {
+        $discovery = $this->discover();
+
+        $extensions = [];
+        foreach ($discovery->xpath("//net-zone/app") as $app) {
+            $appName = (string) $app['name'];
+
+            foreach ($app->xpath(sprintf("action[@ext='%s']", $extension)) as $action) {
+                $extensions[] = array_merge(current($action->attributes()), ['name' => $appName]);
+            }
+        }
+
+        return $extensions;
     }
 
     private function discoverRaw(): string
