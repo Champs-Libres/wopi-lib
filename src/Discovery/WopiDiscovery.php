@@ -9,16 +9,15 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Discovery;
 
+use Exception;
 use loophp\psr17\Psr17Interface;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 use SimpleXMLElement;
 
 final class WopiDiscovery implements WopiDiscoveryInterface
 {
     private string $baseUrl;
-
-    private CacheItemPoolInterface $cache;
 
     private ClientInterface $client;
 
@@ -27,13 +26,11 @@ final class WopiDiscovery implements WopiDiscoveryInterface
     public function __construct(
         array $configuration,
         ClientInterface $client,
-        Psr17Interface $psr17,
-        CacheItemPoolInterface $cache
+        Psr17Interface $psr17
     ) {
         $this->baseUrl = $configuration['server'];
         $this->client = $client;
         $this->psr17 = $psr17;
-        $this->cache = $cache;
     }
 
     public function discoverExtension(string $extension): array
@@ -59,7 +56,7 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
         $url = (string) $capabilities[0]->action['urlsrc'];
 
-        return json_decode($this->request($url), true);
+        return json_decode((string) $this->request($url)->getBody(), true);
     }
 
     public function refresh(): void
@@ -74,25 +71,20 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
     private function discoverRaw(): string
     {
-        return $this->request(sprintf('%s/%s', $this->baseUrl, 'hosting/discovery'));
+        return (string) $this->request(sprintf('%s/%s', $this->baseUrl, 'hosting/discovery'))->getBody();
     }
 
-    private function request(string $url): string
+    private function request(string $url): ResponseInterface
     {
-        $item = $this->cache->getItem(sha1($url));
+        $response = $this
+            ->client
+            ->sendRequest($this->psr17->createRequest('GET', $url));
 
-        if ($item->isHit()) {
-            return $item->get();
+        if (200 !== $response->getStatusCode()) {
+            // TODO
+            throw new Exception('Invalid status code');
         }
 
-        $data = (string) $this
-            ->client
-            ->sendRequest($this->psr17->createRequest('GET', $url))
-            ->getBody();
-
-        $item->set($data);
-        $this->cache->save($item);
-
-        return $data;
+        return $response;
     }
 }
