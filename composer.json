@@ -8,6 +8,7 @@
     "license": "MIT",
     "require": {
         "php": ">= 7.4",
+        "ext-SimpleXML": "*",
         "ext-json": "*",
         "loophp/psr17": "^1.0",
         "psr/cache": "^1.0.1",
