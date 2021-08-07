@@ -38,13 +38,15 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
     public function discoverExtension(string $extension): array
     {
-        $discovery = $this->discover();
-
         $extensions = [];
 
-        foreach ($discovery->xpath('//net-zone/app') as $app) {
+        foreach ($this->discover()->xpath('//net-zone/app') as $app) {
             foreach ($app->xpath(sprintf("action[@ext='%s']", $extension)) as $action) {
-                $extensions[] = array_merge(current($action->attributes()), ['name' => (string) $app['name']], ['favIconUrl' => (string) $app['favIconUrl']]);
+                $extensions[] = array_merge(
+                    current($action->attributes()),
+                    ['name' => (string) $app['name']],
+                    ['favIconUrl' => (string) $app['favIconUrl']]
+                );
             }
         }
 
@@ -53,9 +55,7 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
     public function getCapabilities(): array
     {
-        $discovery = $this->discover();
-
-        $capabilities = $discovery->xpath("//net-zone/app[@name='Capabilities']");
+        $capabilities = $this->discover()->xpath("//net-zone/app[@name='Capabilities']");
 
         $url = (string) $capabilities[0]->action['urlsrc'];
 
