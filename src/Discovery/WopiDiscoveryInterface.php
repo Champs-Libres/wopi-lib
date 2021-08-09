@@ -14,6 +14,4 @@ interface WopiDiscoveryInterface
     public function discoverExtension(string $extension): array;
 
     public function getCapabilities(): array;
-
-    public function refresh(): void;
 }

@@ -59,19 +59,11 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         return json_decode((string) $this->request($url)->getBody(), true);
     }
 
-    public function refresh(): void
-    {
-        $this->discoverRaw();
-    }
-
     private function discover(): SimpleXMLElement
     {
-        return simplexml_load_string($this->discoverRaw());
-    }
-
-    private function discoverRaw(): string
-    {
-        return (string) $this->request(sprintf('%s/%s', $this->baseUrl, 'hosting/discovery'))->getBody();
+        return simplexml_load_string(
+            (string) $this->request(sprintf('%s/%s', $this->baseUrl, 'hosting/discovery'))->getBody()
+        );
     }
 
     private function request(string $url): ResponseInterface
