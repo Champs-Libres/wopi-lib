@@ -9,7 +9,19 @@
 
 # WOPI Lib
 
+A standard and framework agnostic PHP library to facilitate the implementation
+of the WOPI protocol.
+
 ## Description
+
+The **W**eb Application **O**pen **P**latform **I**nterface (WOPI) protocol let you
+integrate Office for the web with your application. The WOPI protocol enables Office for
+the web to access and change files that are stored in your service.
+
+Office for the web platforms:
+
+* [Collabora Office][46]
+* [Office 365][47]
 
 ## Installation
 
@@ -17,9 +29,27 @@
 
 ## Usage
 
-## Documentation
+There are many different ways to store documents in an application. Therefore, this
+library does not provide a specific implementation of the WOPI protocol described
+through [the WOPI interface][49].
 
-Links:
+Thus, this library only provides abstractions and the implementation is left to
+the user.
+
+It provides:
+
+* An [interface][49] describing the WOPI protocol
+* A [discovery][52] class to query and parse the hosting capabilities
+
+In order to be foster interoperability and be used across many different frameworks,
+this library uses PSR7, PSR17, PSR18 and PSR12 conventions from the [PHP-FIG][53].
+
+### Symfony integration
+
+There is already an implementation of the library in Symfony through the [champs-libres/wopi-bundle][54]
+package.
+
+## Documentation
 
 * [https://wopi.readthedocs.io/en/latest/](https://wopi.readthedocs.io/en/latest/)
 
@@ -42,6 +72,8 @@ Static analyzers are also controlling the code. [PHPStan][38] and
 [PSalm][39] are enabled to their maximum level.
 
 ## Contributing
+
+Feel free to contribute to this project by submitting pull requests on Github.
 
 ## Changelog
 
@@ -70,3 +102,11 @@ For more detailed changelogs, please check [the release changelogs][45].
 [43]: https://github.com/champs-libres/wopi-lib/blob/master/CHANGELOG.md
 [44]: https://github.com/champs-libres/wopi-lib/commits/master
 [45]: https://github.com/champs-libres/wopi-lib/releases
+[46]: https://www.collaboraoffice.com/
+[47]: https://www.office.com/
+[49]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/WopiInterface.php
+[50]: https://github.com/Champs-Libres/wopi-bundle/blob/master/src/Resources/config/routes/routes.php
+[51]: https://github.com/Champs-Libres/wopi-bundle/blob/master/src/Controller/Files.php
+[52]: https://github.com/Champs-Libres/wopi-bundle/blob/master/src/Discovery/WopiDiscovery.php
+[53]: https://www.php-fig.org/
+[54]: https://github.com/champs-libres/wopi-bundle
