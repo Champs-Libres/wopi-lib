@@ -1,6 +1,6 @@
 {
     "name": "champs-libres/wopi-lib",
-    "description": "A standard PHP library for the WOPI protocol.",
+    "description": "A standard and framework agnostic PHP library to facilitate the implementation of the WOPI protocol.",
     "keywords": [
         "wopi"
     ],
