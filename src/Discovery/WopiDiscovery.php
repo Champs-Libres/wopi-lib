@@ -59,7 +59,7 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
             foreach ($actions as $action) {
                 $extensions[] = array_merge(
-                    (array) $action->attributes(),
+                    (array) current($action->attributes()),
                     ['name' => (string) $app['name']],
                     ['favIconUrl' => (string) $app['favIconUrl']]
                 );
