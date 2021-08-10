@@ -15,6 +15,8 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use SimpleXMLElement;
 
+use const JSON_THROW_ON_ERROR;
+
 final class WopiDiscovery implements WopiDiscoveryInterface
 {
     private string $baseUrl;
@@ -23,6 +25,9 @@ final class WopiDiscovery implements WopiDiscoveryInterface
 
     private Psr17Interface $psr17;
 
+    /**
+     * @param array<string, string> $configuration
+     */
     public function __construct(
         array $configuration,
         ClientInterface $client,
@@ -37,10 +42,24 @@ final class WopiDiscovery implements WopiDiscoveryInterface
     {
         $extensions = [];
 
-        foreach ($this->discover()->xpath('//net-zone/app') as $app) {
-            foreach ($app->xpath(sprintf("action[@ext='%s']", $extension)) as $action) {
+        /** @var false|SimpleXMLElement[]|null $apps */
+        $apps = $this->discover()->xpath('//net-zone/app');
+
+        if (false === $apps || null === $apps) {
+            throw new Exception();
+        }
+
+        foreach ($apps as $app) {
+            /** @var false|SimpleXMLElement[]|null $actions */
+            $actions = $app->xpath(sprintf("action[@ext='%s']", $extension));
+
+            if (false === $actions || null === $actions) {
+                continue;
+            }
+
+            foreach ($actions as $action) {
                 $extensions[] = array_merge(
-                    current($action->attributes()),
+                    (array) $action->attributes(),
                     ['name' => (string) $app['name']],
                     ['favIconUrl' => (string) $app['favIconUrl']]
                 );
@@ -54,16 +73,26 @@ final class WopiDiscovery implements WopiDiscoveryInterface
     {
         $capabilities = $this->discover()->xpath("//net-zone/app[@name='Capabilities']");
 
-        $url = (string) $capabilities[0]->action['urlsrc'];
-
-        return json_decode((string) $this->request($url)->getBody(), true);
+        return json_decode(
+            (string) $this->request((string) $capabilities[0]->action['urlsrc'])->getBody(),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
     }
 
     private function discover(): SimpleXMLElement
     {
-        return simplexml_load_string(
+        $simpleXmlElement = simplexml_load_string(
             (string) $this->request(sprintf('%s/%s', $this->baseUrl, 'hosting/discovery'))->getBody()
         );
+
+        if (false === $simpleXmlElement) {
+            // TODO
+            throw new Exception('Unable to parse XML.');
+        }
+
+        return $simpleXmlElement;
     }
 
     private function request(string $url): ResponseInterface

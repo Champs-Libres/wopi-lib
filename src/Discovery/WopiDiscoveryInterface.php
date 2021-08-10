@@ -11,7 +11,13 @@ namespace ChampsLibres\WopiLib\Discovery;
 
 interface WopiDiscoveryInterface
 {
+    /**
+     * @return list<array<string, string>>
+     */
     public function discoverExtension(string $extension): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCapabilities(): array;
 }
