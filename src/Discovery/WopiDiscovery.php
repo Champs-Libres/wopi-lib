@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Discovery;
 
+use ChampsLibres\WopiLib\Configuration\WopiConfigurationInterface;
 use Exception;
 use loophp\psr17\Psr17Interface;
 use Psr\Http\Client\ClientInterface;
@@ -19,21 +20,18 @@ use const JSON_THROW_ON_ERROR;
 
 final class WopiDiscovery implements WopiDiscoveryInterface
 {
-    private string $baseUrl;
-
     private ClientInterface $client;
+
+    private WopiConfigurationInterface $configuration;
 
     private Psr17Interface $psr17;
 
-    /**
-     * @param array<string, string> $configuration
-     */
     public function __construct(
-        array $configuration,
+        WopiConfigurationInterface $configuration,
         ClientInterface $client,
         Psr17Interface $psr17
     ) {
-        $this->baseUrl = $configuration['server'];
+        $this->configuration = $configuration;
         $this->client = $client;
         $this->psr17 = $psr17;
     }
@@ -58,8 +56,10 @@ final class WopiDiscovery implements WopiDiscoveryInterface
             }
 
             foreach ($actions as $action) {
+                $actionAttributes = $action->attributes() ?: [];
+
                 $extensions[] = array_merge(
-                    (array) current($action->attributes()),
+                    (array) reset($actionAttributes),
                     ['name' => (string) $app['name']],
                     ['favIconUrl' => (string) $app['favIconUrl']]
                 );
@@ -67,6 +67,38 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         }
 
         return $extensions;
+    }
+
+    public function discoverMimeType(string $mimeType): array
+    {
+        $mimeTypes = [];
+
+        /** @var false|SimpleXMLElement[]|null $apps */
+        $apps = $this->discover()->xpath(sprintf("//net-zone/app[@name='%s']", $mimeType));
+
+        if (false === $apps || null === $apps) {
+            throw new Exception();
+        }
+
+        foreach ($apps as $app) {
+            /** @var false|SimpleXMLElement[]|null $actions */
+            $actions = $app->xpath('action');
+
+            if (false === $actions || null === $actions) {
+                continue;
+            }
+
+            foreach ($actions as $action) {
+                $actionAttributes = $action->attributes() ?: [];
+
+                $mimeTypes[] = array_merge(
+                    (array) reset($actionAttributes),
+                    ['name' => (string) $app['name']],
+                );
+            }
+        }
+
+        return $mimeTypes;
     }
 
     public function getCapabilities(): array
@@ -84,7 +116,11 @@ final class WopiDiscovery implements WopiDiscoveryInterface
     private function discover(): SimpleXMLElement
     {
         $simpleXmlElement = simplexml_load_string(
-            (string) $this->request(sprintf('%s/%s', $this->baseUrl, 'hosting/discovery'))->getBody()
+            (string) $this
+                ->request(
+                    sprintf('%s/%s', $this->configuration['server'], 'hosting/discovery')
+                )
+                ->getBody()
         );
 
         if (false === $simpleXmlElement) {

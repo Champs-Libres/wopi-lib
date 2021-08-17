@@ -17,6 +17,11 @@ interface WopiDiscoveryInterface
     public function discoverExtension(string $extension): array;
 
     /**
+     * @return list<array<string, string>>
+     */
+    public function discoverMimeType(string $mimeType): array;
+
+    /**
      * @return array<string, mixed>
      */
     public function getCapabilities(): array;
