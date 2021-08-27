@@ -38,6 +38,8 @@ final class WopiConfigurationSpec extends ObjectBehavior
             ->offsetGet('abc')
             ->shouldReturn('abc');
 
+        // @TODO: Disabled until phpspec/phpspec#1383 is fixed
+        /*
         $this
             ->offsetExists('abc')
             ->shouldReturn(true);
@@ -45,6 +47,7 @@ final class WopiConfigurationSpec extends ObjectBehavior
         $this
             ->offsetExists('cba')
             ->shouldReturn(false);
+         */
     }
 
     public function it_is_initializable()
