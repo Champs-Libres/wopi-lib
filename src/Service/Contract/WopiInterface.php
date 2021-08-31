@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib;
+namespace ChampsLibres\WopiLib\Service\Contract;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
