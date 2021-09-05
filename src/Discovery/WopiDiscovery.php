@@ -113,6 +113,11 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         );
     }
 
+    public function getPublicKey(): array
+    {
+        return current(current($this->discover()->xpath('//proof-key')));
+    }
+
     private function discover(): SimpleXMLElement
     {
         $simpleXmlElement = simplexml_load_string(
