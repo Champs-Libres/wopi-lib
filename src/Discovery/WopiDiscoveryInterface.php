@@ -25,4 +25,9 @@ interface WopiDiscoveryInterface
      * @return array<string, mixed>
      */
     public function getCapabilities(): array;
+
+    /**
+     * @return array<string, string>
+     */
+    public function getPublicKey(): array;
 }
