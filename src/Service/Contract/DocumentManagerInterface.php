@@ -15,5 +15,5 @@ interface DocumentManagerInterface
 {
     public function read(string $documentId, RequestInterface $request): array;
 
-    public function write(string $documentId, string $content, RequestInterface $request);
+    public function write(string $documentId, string $content, RequestInterface $request): void;
 }
