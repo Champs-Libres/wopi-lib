@@ -27,7 +27,12 @@ interface WopiDiscoveryInterface
     public function getCapabilities(): array;
 
     /**
-     * @return array<string, string>
+     * @return string The MSBLOB key is the "value" attribute in the proof-key tag in the hosting/capabilities xml
      */
-    public function getPublicKey(): array;
+    public function getPublicKey(): string;
+
+    /**
+     * @return string The MSBLOB oldkey is the "oldvalue" attribute in the proof-key tag in the hosting/capabilities xml
+     */
+    public function getPublicKeyOld(): string;
 }

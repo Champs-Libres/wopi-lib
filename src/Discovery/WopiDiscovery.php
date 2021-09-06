@@ -113,9 +113,14 @@ final class WopiDiscovery implements WopiDiscoveryInterface
         );
     }
 
-    public function getPublicKey(): array
+    public function getPublicKey(): string
     {
-        return current(current($this->discover()->xpath('//proof-key')));
+        return (string) $this->discover()->xpath('//proof-key/@value')[0];
+    }
+
+    public function getPublicKeyOld(): string
+    {
+        return (string) $this->discover()->xpath('//proof-key/@oldvalue')[0];
     }
 
     private function discover(): SimpleXMLElement
