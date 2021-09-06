@@ -28,19 +28,6 @@ final class WopiProofValidator implements WopiProofValidatorInterface
         $this->wopiDiscovery = $wopiDiscovery;
     }
 
-    public function __constructX(string $accessToken, string $url, string $timestamp)
-    {
-        $this->expected = sprintf(
-            '%s%s%s%s%s%s',
-            pack('N', strlen($accessToken)),
-            $accessToken,
-            pack('N', strlen($url)),
-            strtoupper($url),
-            pack('N', 8),
-            pack('J', $timestamp)
-        );
-    }
-
     public function isValid(RequestInterface $request): bool
     {
         $xWopiProof = $request->getHeaderLine('X-WOPI-Proof');
