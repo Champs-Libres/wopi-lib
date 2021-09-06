@@ -10,6 +10,7 @@
         "php": ">= 7.4",
         "ext-SimpleXML": "*",
         "ext-json": "*",
+        "ext-openssl": "*",
         "loophp/psr17": "^1.0",
         "phpseclib/phpseclib": "^3.0",
         "psr/cache": "^1.0 || ^2.0 || ^3.0",

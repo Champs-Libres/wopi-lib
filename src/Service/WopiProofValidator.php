@@ -10,7 +10,9 @@ declare(strict_types=1);
 namespace ChampsLibres\WopiLib\Service;
 
 use ChampsLibres\WopiLib\Discovery\WopiDiscoveryInterface;
+use ChampsLibres\WopiLib\Service\Contract\ClockInterface;
 use ChampsLibres\WopiLib\Service\Contract\WopiProofValidatorInterface;
+use DateTimeImmutable;
 use phpseclib3\Crypt\PublicKeyLoader;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
@@ -21,18 +23,29 @@ use const OPENSSL_ALGO_SHA256;
 
 final class WopiProofValidator implements WopiProofValidatorInterface
 {
+    private ClockInterface $clock;
+
     private WopiDiscoveryInterface $wopiDiscovery;
 
-    public function __construct(WopiDiscoveryInterface $wopiDiscovery)
+    public function __construct(WopiDiscoveryInterface $wopiDiscovery, ClockInterface $clock)
     {
         $this->wopiDiscovery = $wopiDiscovery;
+        $this->clock = $clock;
     }
 
     public function isValid(RequestInterface $request): bool
     {
+        $timestamp = $request->getHeaderLine('X-WOPI-Timestamp');
+
+        // Ensure that the X-WOPI-TimeStamp header is no more than 20 minutes old.
+        $date = (new DateTimeImmutable())->setTimestamp((int) (((float) $timestamp - 621355968000000000) / 10000000));
+
+        if (20 * 60 < ($this->clock->now()->getTimestamp() - $date->getTimestamp())) {
+            return false;
+        }
+
         $xWopiProof = $request->getHeaderLine('X-WOPI-Proof');
         $xWopiProofOld = $request->getHeaderLine('X-WOPI-ProofOld');
-        $timestamp = $request->getHeaderLine('X-WOPI-Timestamp');
 
         $key = $this->wopiDiscovery->getPublicKey();
         $keyOld = $this->wopiDiscovery->getPublicKeyOld();
@@ -69,8 +82,8 @@ final class WopiProofValidator implements WopiProofValidatorInterface
 
         return 1 === openssl_verify(
             $expected,
-            base64_decode($proof, true),
-            $key,
+            (string) base64_decode($proof, true),
+            $key->toString('pkcs8'),
             OPENSSL_ALGO_SHA256
         );
     }

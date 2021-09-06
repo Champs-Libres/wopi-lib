@@ -10,7 +10,9 @@ declare(strict_types=1);
 namespace spec\ChampsLibres\WopiLib\Service;
 
 use ChampsLibres\WopiLib\Discovery\WopiDiscoveryInterface;
+use ChampsLibres\WopiLib\Service\Contract\ClockInterface;
 use ChampsLibres\WopiLib\Service\WopiProofValidator;
+use DateTimeImmutable;
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -53,7 +55,7 @@ class WopiProofValidatorSpec extends ObjectBehavior
         $this->shouldHaveType(WopiProofValidator::class);
     }
 
-    public function let(WopiDiscoveryInterface $wopiDiscovery)
+    public function let(WopiDiscoveryInterface $wopiDiscovery, ClockInterface $clock)
     {
         $wopiDiscovery
             ->getPublicKey()
@@ -63,6 +65,10 @@ class WopiProofValidatorSpec extends ObjectBehavior
             ->getPublicKeyOld()
             ->willReturn('BgIAAACkAABSU0ExAAgAAAEAAQCZf5Q9uM8yf7qPrZZr+Ou3i0e/0G2n8/o7ahMvHA/Xn1cvcQgoMdWKk/EJElrcG5aK9qWXqBsSE3mj49eq+D8uoUJKnsTnrC1FksmIp1YLqLdD7MDq1BvKHyBM5Nc1v/St7MfrRKD5f2UUzosbiVf8cZxdsTjqFYm3xTE2fu+gH/ug3IwbtqL3Uf0UcTyBC/RpCcX7GCEslqjr3TCuV0v8TqyQ6dKQWgEsTkymCTn2qWMLoBoNUpPKAXU5bl9to/VxMW7IVr0+6RRTX+rIqKcVaR4GNHpXHIwzjNwLMjZgfavYFqTZ3ul0j5evL4nrP3jTHVY320XhkU857eBjWWPN');
 
-        $this->beConstructedWith($wopiDiscovery);
+        $clock
+            ->now()
+            ->willReturn((new DateTimeImmutable())->setTimestamp(1630872600));
+
+        $this->beConstructedWith($wopiDiscovery, $clock);
     }
 }
