@@ -105,8 +105,12 @@ final class WopiDiscovery implements WopiDiscoveryInterface
     {
         $capabilities = $this->discover()->xpath("//net-zone/app[@name='Capabilities']");
 
+        if (false === $capabilities = reset($capabilities)) {
+            return [];
+        }
+
         return json_decode(
-            (string) $this->request((string) $capabilities[0]->action['urlsrc'])->getBody(),
+            (string) $this->request((string) $capabilities->action['urlsrc'])->getBody(),
             true,
             512,
             JSON_THROW_ON_ERROR
