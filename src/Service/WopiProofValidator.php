@@ -16,6 +16,7 @@ use Psr\Http\Message\RequestInterface;
 use Throwable;
 
 use function strlen;
+
 use const OPENSSL_ALGO_SHA256;
 
 final class WopiProofValidator implements WopiProofValidatorInterface
@@ -63,7 +64,9 @@ final class WopiProofValidator implements WopiProofValidatorInterface
             pack('J', $timestamp)
         );
 
-        return $this->verify($expected, $xWopiProof, $key) || $this->verify($expected, $xWopiProofOld, $key) || $this->verify($expected, $xWopiProof, $keyOld);
+        return $this->verify($expected, $xWopiProof, $key)
+            || $this->verify($expected, $xWopiProofOld, $key)
+            || $this->verify($expected, $xWopiProof, $keyOld);
     }
 
     /**
