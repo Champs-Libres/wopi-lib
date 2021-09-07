@@ -14,12 +14,11 @@ use ChampsLibres\WopiLib\Service\Contract\ClockInterface;
 use ChampsLibres\WopiLib\Service\Contract\WopiProofValidatorInterface;
 use DateTimeImmutable;
 use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib3\Crypt\RSA;
 use Psr\Http\Message\RequestInterface;
 use Throwable;
 
 use function strlen;
-
-use const OPENSSL_ALGO_SHA256;
 
 final class WopiProofValidator implements WopiProofValidatorInterface
 {
@@ -44,15 +43,9 @@ final class WopiProofValidator implements WopiProofValidatorInterface
             return false;
         }
 
-        $xWopiProof = $request->getHeaderLine('X-WOPI-Proof');
-        $xWopiProofOld = $request->getHeaderLine('X-WOPI-ProofOld');
-
-        $key = $this->wopiDiscovery->getPublicKey();
-        $keyOld = $this->wopiDiscovery->getPublicKeyOld();
-
-        $url = (string) $request->getUri();
         $params = [];
         parse_str($request->getUri()->getQuery(), $params);
+        $url = (string) $request->getUri();
 
         $expected = sprintf(
             '%s%s%s%s%s%s',
@@ -63,6 +56,11 @@ final class WopiProofValidator implements WopiProofValidatorInterface
             pack('N', 8),
             pack('J', $timestamp)
         );
+
+        $key = $this->wopiDiscovery->getPublicKey();
+        $keyOld = $this->wopiDiscovery->getPublicKeyOld();
+        $xWopiProof = $request->getHeaderLine('X-WOPI-Proof');
+        $xWopiProofOld = $request->getHeaderLine('X-WOPI-ProofOld');
 
         return $this->verify($expected, $xWopiProof, $key)
             || $this->verify($expected, $xWopiProofOld, $key)
@@ -75,16 +73,15 @@ final class WopiProofValidator implements WopiProofValidatorInterface
     private function verify(string $expected, string $proof, string $key): bool
     {
         try {
+            /** @var RSA $key */
             $key = PublicKeyLoader::loadPublicKey($key);
         } catch (Throwable $e) {
             return false;
         }
 
-        return 1 === openssl_verify(
-            $expected,
-            (string) base64_decode($proof, true),
-            $key->toString('pkcs8'),
-            OPENSSL_ALGO_SHA256
-        );
+        return $key
+            ->withHash('sha256')
+            ->withPadding(RSA::SIGNATURE_RELAXED_PKCS1)
+            ->verify($expected, (string) base64_decode($proof, true));
     }
 }
