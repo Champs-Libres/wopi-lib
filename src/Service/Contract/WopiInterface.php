@@ -35,7 +35,7 @@ interface WopiInterface
 
     public function putFile(string $fileId, string $accessToken, string $xWopiLock, string $xWopiEditors, RequestInterface $request): ResponseInterface;
 
-    public function putRelativeFile(string $fileId, string $accessToken, ?string $suggestedTarget, ?string $relativeTarget, bool $OverwriteRelativeTarget, int $size, RequestInterface $request): ResponseInterface;
+    public function putRelativeFile(string $fileId, string $accessToken, ?string $suggestedTarget, ?string $relativeTarget, bool $overwriteRelativeTarget, int $size, RequestInterface $request): ResponseInterface;
 
     public function putUserInfo(string $fileId, string $accessToken, RequestInterface $request): ResponseInterface;
 
