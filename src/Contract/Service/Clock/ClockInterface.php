@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Service\Contract;
+namespace ChampsLibres\WopiLib\Contract\Service\Clock;
 
 use DateTimeImmutable;
 

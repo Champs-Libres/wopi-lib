@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Service\Contract;
+namespace ChampsLibres\WopiLib\Contract\Service;
 
 use Psr\Http\Message\RequestInterface;
 
-interface WopiProofValidatorInterface
+interface ProofValidatorInterface
 {
     public function isValid(RequestInterface $request): bool;
 }

@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-namespace spec\ChampsLibres\WopiLib\Configuration;
+namespace spec\ChampsLibres\WopiLib\Service\Configuration;
 
-use ChampsLibres\WopiLib\Configuration\WopiConfiguration;
+use ChampsLibres\WopiLib\Service\Configuration\Configuration;
 use PhpSpec\ObjectBehavior;
 
-final class WopiConfigurationSpec extends ObjectBehavior
+final class ConfigurationSpec extends ObjectBehavior
 {
     public function it_is_created_from_an_array_of_properties()
     {
@@ -52,7 +52,7 @@ final class WopiConfigurationSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(WopiConfiguration::class);
+        $this->shouldHaveType(Configuration::class);
     }
 
     public function let()

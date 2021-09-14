@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Service;
 
-use ChampsLibres\WopiLib\Service\Contract\DocumentLockManagerInterface;
+use ChampsLibres\WopiLib\Contract\Service\DocumentLockManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 

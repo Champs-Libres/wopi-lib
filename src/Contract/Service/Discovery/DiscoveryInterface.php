@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Discovery;
+namespace ChampsLibres\WopiLib\Contract\Service\Discovery;
 
-interface WopiDiscoveryInterface
+interface DiscoveryInterface
 {
     /**
      * @return list<array<string, string>>

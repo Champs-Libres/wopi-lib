@@ -7,19 +7,19 @@
 
 declare(strict_types=1);
 
-namespace spec\ChampsLibres\WopiLib\Discovery;
+namespace spec\ChampsLibres\WopiLib\Service\Discovery;
 
-use ChampsLibres\WopiLib\Configuration\WopiConfigurationInterface;
-use ChampsLibres\WopiLib\Discovery\WopiDiscovery;
+use ChampsLibres\WopiLib\Contract\Service\Configuration\ConfigurationInterface;
+use ChampsLibres\WopiLib\Service\Discovery\Discovery;
 use loophp\psr17\Psr17Interface;
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-final class WopiDiscoverySpec extends ObjectBehavior
+final class DiscoverySpec extends ObjectBehavior
 {
-    public function it_is_able_to_discover_the_extension(WopiConfigurationInterface $wopiConfiguration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request, ResponseInterface $response)
+    public function it_is_able_to_discover_the_extension(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request, ResponseInterface $response)
     {
         $properties = [
             'server' => 'http://wopi-client:1234',
@@ -27,7 +27,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             'access_token_ttl' => 'access_token_ttl',
         ];
 
-        $wopiConfiguration->beConstructedWith($properties);
+        $configuration->beConstructedWith($properties);
 
         $response
             ->getStatusCode()
@@ -39,9 +39,9 @@ final class WopiDiscoverySpec extends ObjectBehavior
 
         // TODO: fix exception [err:Error("Cannot use object of type PhpSpec\Wrapper\Collaborator as array")] has been thrown.
         // TODO: submit a PR against phpspec/phpspec.
-        // TODO: So we can use $wopiConfiguration['server'] instead of $properties['server']
+        // TODO: So we can use $configuration['server'] instead of $properties['server']
 
-        $wopiConfiguration
+        $configuration
             ->offsetGet('server')
             ->willReturn('http://wopi-client:1234');
 
@@ -66,7 +66,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             ]);
     }
 
-    public function it_is_able_to_discover_the_mime_type(WopiConfigurationInterface $wopiConfiguration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request, ResponseInterface $response)
+    public function it_is_able_to_discover_the_mime_type(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request, ResponseInterface $response)
     {
         $properties = [
             'server' => 'http://wopi-client:1234',
@@ -74,7 +74,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             'access_token_ttl' => 'access_token_ttl',
         ];
 
-        $wopiConfiguration->beConstructedWith($properties);
+        $configuration->beConstructedWith($properties);
 
         $response
             ->getStatusCode()
@@ -86,9 +86,9 @@ final class WopiDiscoverySpec extends ObjectBehavior
 
         // TODO: fix exception [err:Error("Cannot use object of type PhpSpec\Wrapper\Collaborator as array")] has been thrown.
         // TODO: submit a PR against phpspec/phpspec.
-        // TODO: So we can use $wopiConfiguration['server'] instead of $properties['server']
+        // TODO: So we can use $configuration['server'] instead of $properties['server']
 
-        $wopiConfiguration
+        $configuration
             ->offsetGet('server')
             ->willReturn('http://wopi-client:1234');
 
@@ -112,7 +112,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             ]);
     }
 
-    public function it_is_able_to_get_capabilities(WopiConfigurationInterface $wopiConfiguration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request1, ResponseInterface $response1, RequestInterface $request2, ResponseInterface $response2)
+    public function it_is_able_to_get_capabilities(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request1, ResponseInterface $response1, RequestInterface $request2, ResponseInterface $response2)
     {
         $properties = [
             'server' => 'http://wopi-client:1234',
@@ -120,7 +120,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             'access_token_ttl' => 'access_token_ttl',
         ];
 
-        $wopiConfiguration->beConstructedWith($properties);
+        $configuration->beConstructedWith($properties);
 
         $response1
             ->getStatusCode()
@@ -140,9 +140,9 @@ final class WopiDiscoverySpec extends ObjectBehavior
 
         // TODO: fix exception [err:Error("Cannot use object of type PhpSpec\Wrapper\Collaborator as array")] has been thrown.
         // TODO: submit a PR against phpspec/phpspec.
-        // TODO: So we can use $wopiConfiguration['server'] instead of $properties['server']
+        // TODO: So we can use $configuration['server'] instead of $properties['server']
 
-        $wopiConfiguration
+        $configuration
             ->offsetGet('server')
             ->willReturn('http://wopi-client:1234');
 
@@ -178,7 +178,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             ]);
     }
 
-    public function it_is_able_to_retrieve_the_public_keys(WopiConfigurationInterface $wopiConfiguration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request1, ResponseInterface $response1, RequestInterface $request2, ResponseInterface $response2)
+    public function it_is_able_to_retrieve_the_public_keys(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request1, ResponseInterface $response1, RequestInterface $request2, ResponseInterface $response2)
     {
         $properties = [
             'server' => 'http://wopi-client:1234',
@@ -186,7 +186,7 @@ final class WopiDiscoverySpec extends ObjectBehavior
             'access_token_ttl' => 'access_token_ttl',
         ];
 
-        $wopiConfiguration->beConstructedWith($properties);
+        $configuration->beConstructedWith($properties);
 
         $response1
             ->getStatusCode()
@@ -198,9 +198,9 @@ final class WopiDiscoverySpec extends ObjectBehavior
 
         // TODO: fix exception [err:Error("Cannot use object of type PhpSpec\Wrapper\Collaborator as array")] has been thrown.
         // TODO: submit a PR against phpspec/phpspec.
-        // TODO: So we can use $wopiConfiguration['server'] instead of $properties['server']
+        // TODO: So we can use $configuration['server'] instead of $properties['server']
 
-        $wopiConfiguration
+        $configuration
             ->offsetGet('server')
             ->willReturn('http://wopi-client:1234');
 
@@ -227,11 +227,11 @@ final class WopiDiscoverySpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(WopiDiscovery::class);
+        $this->shouldHaveType(Discovery::class);
     }
 
-    public function let(WopiConfigurationInterface $wopiConfiguration, ClientInterface $client, Psr17Interface $psr17)
+    public function let(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17)
     {
-        $this->beConstructedWith($wopiConfiguration, $client, $psr17);
+        $this->beConstructedWith($configuration, $client, $psr17);
     }
 }

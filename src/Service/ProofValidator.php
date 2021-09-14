@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Service;
 
-use ChampsLibres\WopiLib\Discovery\WopiDiscoveryInterface;
-use ChampsLibres\WopiLib\Service\Contract\ClockInterface;
-use ChampsLibres\WopiLib\Service\Contract\WopiProofValidatorInterface;
+use ChampsLibres\WopiLib\Contract\Service\Clock\ClockInterface;
+use ChampsLibres\WopiLib\Contract\Service\Discovery\DiscoveryInterface;
+use ChampsLibres\WopiLib\Contract\Service\ProofValidatorInterface;
+use ChampsLibres\WopiLib\Contract\Service\WopiInterface;
 use DateTimeImmutable;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Crypt\RSA;
@@ -20,21 +21,21 @@ use Throwable;
 
 use function strlen;
 
-final class WopiProofValidator implements WopiProofValidatorInterface
+final class ProofValidator implements ProofValidatorInterface
 {
     private ClockInterface $clock;
 
-    private WopiDiscoveryInterface $wopiDiscovery;
+    private DiscoveryInterface $discovery;
 
-    public function __construct(WopiDiscoveryInterface $wopiDiscovery, ClockInterface $clock)
+    public function __construct(DiscoveryInterface $discovery, ClockInterface $clock)
     {
-        $this->wopiDiscovery = $wopiDiscovery;
+        $this->discovery = $discovery;
         $this->clock = $clock;
     }
 
     public function isValid(RequestInterface $request): bool
     {
-        $timestamp = $request->getHeaderLine('X-WOPI-Timestamp');
+        $timestamp = $request->getHeaderLine(WopiInterface::HEADER_TIMESTAMP);
 
         // Ensure that the X-WOPI-TimeStamp header is no more than 20 minutes old.
         $date = (new DateTimeImmutable())->setTimestamp((int) (((float) $timestamp - 621355968000000000) / 10000000));
@@ -57,10 +58,10 @@ final class WopiProofValidator implements WopiProofValidatorInterface
             pack('J', $timestamp)
         );
 
-        $key = $this->wopiDiscovery->getPublicKey();
-        $keyOld = $this->wopiDiscovery->getPublicKeyOld();
-        $xWopiProof = $request->getHeaderLine('X-WOPI-Proof');
-        $xWopiProofOld = $request->getHeaderLine('X-WOPI-ProofOld');
+        $key = $this->discovery->getPublicKey();
+        $keyOld = $this->discovery->getPublicKeyOld();
+        $xWopiProof = $request->getHeaderLine(WopiInterface::HEADER_PROOF);
+        $xWopiProofOld = $request->getHeaderLine(WopiInterface::HEADER_PROOF_OLD);
 
         return $this->verify($expected, $xWopiProof, $key)
             || $this->verify($expected, $xWopiProofOld, $key)

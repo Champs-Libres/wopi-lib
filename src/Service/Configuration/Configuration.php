@@ -7,11 +7,13 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Configuration;
+namespace ChampsLibres\WopiLib\Service\Configuration;
+
+use ChampsLibres\WopiLib\Contract\Service\Configuration\ConfigurationInterface;
 
 use function array_key_exists;
 
-final class WopiConfiguration implements WopiConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     private array $properties;
 

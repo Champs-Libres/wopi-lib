@@ -9,15 +9,15 @@ declare(strict_types=1);
 
 namespace spec\ChampsLibres\WopiLib\Service;
 
-use ChampsLibres\WopiLib\Discovery\WopiDiscoveryInterface;
-use ChampsLibres\WopiLib\Service\Contract\ClockInterface;
-use ChampsLibres\WopiLib\Service\WopiProofValidator;
+use ChampsLibres\WopiLib\Contract\Service\Clock\ClockInterface;
+use ChampsLibres\WopiLib\Contract\Service\Discovery\DiscoveryInterface;
+use ChampsLibres\WopiLib\Service\ProofValidator;
 use DateTimeImmutable;
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
-class WopiProofValidatorSpec extends ObjectBehavior
+class ProofValidatorSpec extends ObjectBehavior
 {
     public function it_can_verify_a_request(RequestInterface $request, UriInterface $uri)
     {
@@ -52,10 +52,10 @@ class WopiProofValidatorSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType(WopiProofValidator::class);
+        $this->shouldHaveType(ProofValidator::class);
     }
 
-    public function let(WopiDiscoveryInterface $wopiDiscovery, ClockInterface $clock)
+    public function let(DiscoveryInterface $wopiDiscovery, ClockInterface $clock)
     {
         $wopiDiscovery
             ->getPublicKey()

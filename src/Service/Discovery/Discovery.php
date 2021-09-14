@@ -7,9 +7,10 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Discovery;
+namespace ChampsLibres\WopiLib\Service\Discovery;
 
-use ChampsLibres\WopiLib\Configuration\WopiConfigurationInterface;
+use ChampsLibres\WopiLib\Contract\Service\Configuration\ConfigurationInterface;
+use ChampsLibres\WopiLib\Contract\Service\Discovery\DiscoveryInterface;
 use Exception;
 use loophp\psr17\Psr17Interface;
 use Psr\Http\Client\ClientInterface;
@@ -18,16 +19,16 @@ use SimpleXMLElement;
 
 use const JSON_THROW_ON_ERROR;
 
-final class WopiDiscovery implements WopiDiscoveryInterface
+final class Discovery implements DiscoveryInterface
 {
     private ClientInterface $client;
 
-    private WopiConfigurationInterface $configuration;
+    private ConfigurationInterface $configuration;
 
     private Psr17Interface $psr17;
 
     public function __construct(
-        WopiConfigurationInterface $configuration,
+        ConfigurationInterface $configuration,
         ClientInterface $client,
         Psr17Interface $psr17
     ) {

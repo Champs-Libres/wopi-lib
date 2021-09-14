@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace ChampsLibres\WopiLib\Configuration;
+namespace ChampsLibres\WopiLib\Contract\Service\Configuration;
 
 use ArrayAccess;
 use JsonSerializable;
 
-interface WopiConfigurationInterface extends ArrayAccess, JsonSerializable
+interface ConfigurationInterface extends ArrayAccess, JsonSerializable
 {
 }

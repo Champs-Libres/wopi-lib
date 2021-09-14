@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Service\Clock;
 
-use ChampsLibres\WopiLib\Service\Contract\ClockInterface;
+use ChampsLibres\WopiLib\Contract\Service\Clock\ClockInterface;
 use DateTimeImmutable;
 
 final class SystemClock implements ClockInterface
