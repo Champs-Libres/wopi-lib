@@ -12,8 +12,8 @@ namespace ChampsLibres\WopiLib\Service;
 use ChampsLibres\WopiLib\Contract\Service\Clock\ClockInterface;
 use ChampsLibres\WopiLib\Contract\Service\Discovery\DiscoveryInterface;
 use ChampsLibres\WopiLib\Contract\Service\ProofValidatorInterface;
+use ChampsLibres\WopiLib\Contract\Service\Utils\DotNetTimeConverterInterface;
 use ChampsLibres\WopiLib\Contract\Service\WopiInterface;
-use DateTimeImmutable;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Crypt\RSA;
 use Psr\Http\Message\RequestInterface;
@@ -27,18 +27,22 @@ final class ProofValidator implements ProofValidatorInterface
 
     private DiscoveryInterface $discovery;
 
-    public function __construct(DiscoveryInterface $discovery, ClockInterface $clock)
-    {
-        $this->discovery = $discovery;
+    private DotNetTimeConverterInterface $dotNetTimeConverter;
+
+    public function __construct(
+        DiscoveryInterface $discovery,
+        ClockInterface $clock,
+        DotNetTimeConverterInterface $dotNetTimeConverter
+    ) {
         $this->clock = $clock;
+        $this->discovery = $discovery;
+        $this->dotNetTimeConverter = $dotNetTimeConverter;
     }
 
     public function isValid(RequestInterface $request): bool
     {
         $timestamp = $request->getHeaderLine(WopiInterface::HEADER_TIMESTAMP);
-
-        // Ensure that the X-WOPI-TimeStamp header is no more than 20 minutes old.
-        $date = (new DateTimeImmutable())->setTimestamp((int) (((float) $timestamp - 621355968000000000) / 10000000));
+        $date = $this->dotNetTimeConverter->toDatetime($timestamp);
 
         if (20 * 60 < ($this->clock->now()->getTimestamp() - $date->getTimestamp())) {
             return false;
