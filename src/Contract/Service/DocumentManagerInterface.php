@@ -9,11 +9,27 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Contract\Service;
 
-use Psr\Http\Message\RequestInterface;
+use ChampsLibres\WopiLib\Contract\Entity\Document;
 
 interface DocumentManagerInterface
 {
-    public function read(string $documentId, RequestInterface $request): array;
+    public function create(array $data): Document;
 
-    public function write(string $documentId, string $content, RequestInterface $request): void;
+    public function deleteLock(Document $document): void;
+
+    public function findByDocumentFilename(string $documentFilename): ?Document;
+
+    public function findByDocumentId(string $documentId): ?Document;
+
+    public function getLock(Document $document): string;
+
+    public function getVersion(Document $document): string;
+
+    public function hasLock(Document $document): bool;
+
+    public function lock(Document $document, string $lock): void;
+
+    public function remove(Document $document): void;
+
+    public function write(Document $document): void;
 }
