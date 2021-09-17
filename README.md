@@ -21,6 +21,7 @@ the web to access and change files that are stored in your service.
 Office for the web platforms:
 
 * [Collabora Office][46]
+* [OnlyOffice][55]
 * [Office 365][47]
 
 ## Installation
@@ -33,13 +34,16 @@ There are many different ways to store documents in an application. Therefore, t
 library does not provide a specific implementation of the WOPI protocol described
 through [the WOPI interface][49].
 
-Thus, this library only provides abstractions and the implementation is left to
-the user.
+Thus, this library mostly provides abstractions and few service implementations.
 
 It provides:
 
-* An [interface][49] describing the WOPI protocol
-* A [discovery][52] class to query and parse the hosting capabilities
+* A [Wopi interface][49] describing the WOPI protocol
+* A [Discovery interface][52] and its implementation
+* A [DocumentManager interface][56] describing a document manager
+* A [DocumentLockManager interface][57] describing a document lock manager
+* A [ProofValidator interface][58] its implementation
+* A [DotNetTimeConverter interface][59] and its implementation
 
 In order to be foster interoperability and be used across many different frameworks,
 this library uses PSR7, PSR17, PSR18 and PSR12 conventions from the [PHP-FIG][53].
@@ -104,9 +108,12 @@ For more detailed changelogs, please check [the release changelogs][45].
 [45]: https://github.com/champs-libres/wopi-lib/releases
 [46]: https://www.collaboraoffice.com/
 [47]: https://www.office.com/
-[49]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/WopiInterface.php
-[50]: https://github.com/Champs-Libres/wopi-bundle/blob/master/src/Resources/config/routes/routes.php
-[51]: https://github.com/Champs-Libres/wopi-bundle/blob/master/src/Controller/Files.php
-[52]: https://github.com/Champs-Libres/wopi-bundle/blob/master/src/Discovery/WopiDiscovery.php
+[49]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/Contract/Service/WopiInterface.php
+[52]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/Contract/Service/Discovery/DiscoveryInterface.php
 [53]: https://www.php-fig.org/
-[54]: https://github.com/champs-libres/wopi-bundle
+[54]: https://github.com/champs-libres/wopi-lib
+[55]: https://www.onlyoffice.com/
+[56]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/Contract/Service/DocumentManagerInterface.php
+[57]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/Contract/Service/DocumentLockManagerInterface.php
+[58]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/Contract/Service/ProofValidatorInterface.php
+[59]: https://github.com/Champs-Libres/wopi-lib/blob/master/src/Contract/Service/Utils/DotNetTimeConverterInterface.php
