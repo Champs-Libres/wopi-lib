@@ -24,8 +24,6 @@ interface Document
 
     public function getWopiFilename(): string;
 
-    public function getWopiId(): int;
-
     public function getWopiSha256(): string;
 
     public function getWopiSize(): string;
