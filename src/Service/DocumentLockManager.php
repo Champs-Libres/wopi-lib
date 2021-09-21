@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Service;
 
+use ChampsLibres\WopiLib\Contract\Entity\Document;
 use ChampsLibres\WopiLib\Contract\Service\DocumentLockManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
@@ -22,26 +23,26 @@ final class DocumentLockManager implements DocumentLockManagerInterface
         $this->cache = $cache;
     }
 
-    public function deleteLock(string $documentId, RequestInterface $request): bool
+    public function deleteLock(Document $document, RequestInterface $request): bool
     {
-        return $this->cache->deleteItem($this->getCacheId($documentId));
+        return $this->cache->deleteItem($this->getCacheId($document->getWopiFileId()));
     }
 
-    public function getLock(string $documentId, RequestInterface $request): string
+    public function getLock(Document $document, RequestInterface $request): string
     {
-        return $this->cache->getItem($this->getCacheId($documentId))->get();
+        return $this->cache->getItem($this->getCacheId($document->getWopiFileId()))->get();
     }
 
-    public function hasLock(string $documentId, RequestInterface $request): bool
+    public function hasLock(Document $document, RequestInterface $request): bool
     {
-        $item = $this->cache->getItem($this->getCacheId($documentId));
+        $item = $this->cache->getItem($this->getCacheId($document->getWopiFileId()));
 
         return $item->isHit();
     }
 
-    public function setLock(string $documentId, string $lockId, RequestInterface $request): bool
+    public function setLock(Document $document, string $lockId, RequestInterface $request): bool
     {
-        $item = $this->cache->getItem($this->getCacheId($documentId));
+        $item = $this->cache->getItem($this->getCacheId($document->getWopiFileId()));
 
         $item->set($lockId);
 
