@@ -9,15 +9,16 @@ declare(strict_types=1);
 
 namespace ChampsLibres\WopiLib\Contract\Service;
 
+use ChampsLibres\WopiLib\Contract\Entity\Document;
 use Psr\Http\Message\RequestInterface;
 
 interface DocumentLockManagerInterface
 {
-    public function deleteLock(string $documentId, RequestInterface $request): bool;
+    public function deleteLock(Document $document, RequestInterface $request): bool;
 
-    public function getLock(string $documentId, RequestInterface $request): string;
+    public function getLock(Document $document, RequestInterface $request): string;
 
-    public function hasLock(string $documentId, RequestInterface $request): bool;
+    public function hasLock(Document $document, RequestInterface $request): bool;
 
-    public function setLock(string $documentId, string $lockId, RequestInterface $request): bool;
+    public function setLock(Document $document, string $lockId, RequestInterface $request): bool;
 }
