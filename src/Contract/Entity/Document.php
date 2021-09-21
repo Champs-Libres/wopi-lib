@@ -11,37 +11,37 @@ namespace ChampsLibres\WopiLib\Contract\Entity;
 
 interface Document
 {
-    public function getBasename(): string;
-
-    public function getContent();
-
-    public function getExtension(): string;
-
-    public function getFileId(): string;
-
-    public function getFilename(): string;
-
-    public function getId(): int;
-
-    public function getSha256(): string;
-
-    public function getSize(): string;
-
-    public static function new(array $data): self;
+    public function getWopiBasename(): string;
 
     /**
-     * @param string $basename A filename with extension
+     * @return resource|string
      */
-    public function setBasename(string $basename): void;
+    public function getWopiContent();
 
-    public function setContent(string $content): void;
+    public function getWopiExtension(): string;
 
-    public function setExtension(string $extension): void;
+    public function getWopiFileId(): string;
+
+    public function getWopiFilename(): string;
+
+    public function getWopiId(): int;
+
+    public function getWopiSha256(): string;
+
+    public function getWopiSize(): string;
+
+    public static function newWopi(array $data): self;
+
+    public function setWopiBasename(string $basename): void;
+
+    public function setWopiContent(string $content): void;
+
+    public function setWopiExtension(string $extension): void;
 
     /**
      * @param string $filename A filename without extension
      */
-    public function setFilename(string $filename): void;
+    public function setWopiFilename(string $filename): void;
 
-    public function setSize(string $size): void;
+    public function setWopiSize(string $size): void;
 }
