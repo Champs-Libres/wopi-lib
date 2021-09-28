@@ -25,24 +25,24 @@ final class DocumentLockManager implements DocumentLockManagerInterface
 
     public function deleteLock(Document $document, RequestInterface $request): bool
     {
-        return $this->cache->deleteItem($this->getCacheId($document->getWopiFileId()));
+        return $this->cache->deleteItem($this->getCacheId($document->getWopiDocId()));
     }
 
     public function getLock(Document $document, RequestInterface $request): string
     {
-        return $this->cache->getItem($this->getCacheId($document->getWopiFileId()))->get();
+        return $this->cache->getItem($this->getCacheId($document->getWopiDocId()))->get();
     }
 
     public function hasLock(Document $document, RequestInterface $request): bool
     {
-        $item = $this->cache->getItem($this->getCacheId($document->getWopiFileId()));
+        $item = $this->cache->getItem($this->getCacheId($document->getWopiDocId()));
 
         return $item->isHit();
     }
 
     public function setLock(Document $document, string $lockId, RequestInterface $request): bool
     {
-        $item = $this->cache->getItem($this->getCacheId($document->getWopiFileId()));
+        $item = $this->cache->getItem($this->getCacheId($document->getWopiDocId()));
 
         $item->set($lockId);
 

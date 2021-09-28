@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace ChampsLibres\WopiLib\Contract\Service;
 
 use ChampsLibres\WopiLib\Contract\Entity\Document;
+use Psr\Http\Message\StreamInterface;
 
 interface DocumentManagerInterface
 {
@@ -21,7 +22,15 @@ interface DocumentManagerInterface
 
     public function findByDocumentId(string $documentId): ?Document;
 
+    public function getBasename(Document $document): string;
+
+    public function getDocumentId(Document $document): string;
+
     public function getLock(Document $document): string;
+
+    public function getSha256(Document $document): string;
+
+    public function getSize(Document $document): int;
 
     public function getVersion(Document $document): string;
 
@@ -29,7 +38,9 @@ interface DocumentManagerInterface
 
     public function lock(Document $document, string $lock): void;
 
+    public function read(Document $document): StreamInterface;
+
     public function remove(Document $document): void;
 
-    public function write(Document $document): void;
+    public function write(Document $document, array $properties = []): void;
 }
