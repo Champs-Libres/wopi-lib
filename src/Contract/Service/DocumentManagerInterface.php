@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace ChampsLibres\WopiLib\Contract\Service;
 
 use ChampsLibres\WopiLib\Contract\Entity\Document;
+use DateTimeInterface;
 use Psr\Http\Message\StreamInterface;
 
 interface DocumentManagerInterface
@@ -24,7 +25,11 @@ interface DocumentManagerInterface
 
     public function getBasename(Document $document): string;
 
+    public function getCreationDate(Document $document): DateTimeInterface;
+
     public function getDocumentId(Document $document): string;
+
+    public function getLastModifiedDate(Document $document): DateTimeInterface;
 
     public function getLock(Document $document): string;
 
