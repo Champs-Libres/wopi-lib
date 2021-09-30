@@ -37,6 +37,39 @@ final class Discovery implements DiscoveryInterface
         $this->psr17 = $psr17;
     }
 
+    public function discoverAction(string $extension, string $name = 'view'): ?array
+    {
+        /** @var false|SimpleXMLElement[]|null $apps */
+        $apps = $this->discover()->xpath('//net-zone/app');
+
+        if (false === $apps || null === $apps) {
+            throw new Exception();
+        }
+
+        $return = [];
+
+        foreach ($apps as $app) {
+            /** @var false|SimpleXMLElement[]|null $actions */
+            $actions = $app->xpath(sprintf('action[@ext="%s" and @name="%s"]', $extension, $name));
+
+            if (false === $actions || null === $actions) {
+                continue;
+            }
+
+            foreach ($actions as $action) {
+                $actionAttributes = $action->attributes() ?: [];
+
+                $return[] = array_merge(
+                    (array) reset($actionAttributes),
+                    ['app' => (string) $app['name']],
+                    ['favIconUrl' => (string) $app['favIconUrl']]
+                );
+            }
+        }
+
+        return (false === $action = current($return)) ? null : $action;
+    }
+
     public function discoverExtension(string $extension): array
     {
         $extensions = [];

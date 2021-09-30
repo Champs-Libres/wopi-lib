@@ -12,6 +12,11 @@ namespace ChampsLibres\WopiLib\Contract\Service\Discovery;
 interface DiscoveryInterface
 {
     /**
+     * @return array<string, string>
+     */
+    public function discoverAction(string $extension, string $name = 'view'): ?array;
+
+    /**
      * @return list<array<string, string>>
      */
     public function discoverExtension(string $extension): array;

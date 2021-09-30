@@ -19,6 +19,55 @@ use Psr\Http\Message\ResponseInterface;
 
 final class DiscoverySpec extends ObjectBehavior
 {
+    public function it_is_able_to_discover_the_action(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request, ResponseInterface $response)
+    {
+        $properties = [
+            'server' => 'http://wopi-client:1234',
+            'access_token_ttl' => 'access_token_ttl',
+        ];
+
+        $configuration->beConstructedWith($properties);
+
+        $response
+            ->getStatusCode()
+            ->willReturn(200);
+
+        $response
+            ->getBody()
+            ->willReturn(file_get_contents(__DIR__ . '/discovery.xml'));
+
+        // TODO: fix exception [err:Error("Cannot use object of type PhpSpec\Wrapper\Collaborator as array")] has been thrown.
+        // TODO: submit a PR against phpspec/phpspec.
+        // TODO: So we can use $configuration['server'] instead of $properties['server']
+
+        $configuration
+            ->offsetGet('server')
+            ->willReturn('http://wopi-client:1234');
+
+        $psr17
+            ->createRequest('GET', sprintf('%s/hosting/discovery', $properties['server']))
+            ->willReturn($request);
+
+        $client
+            ->sendRequest($request)
+            ->willReturn($response);
+
+        $this
+            ->discoverAction('odt', 'edit')
+            ->shouldReturn([
+                'default' => 'true',
+                'ext' => 'odt',
+                'name' => 'edit',
+                'urlsrc' => 'http://127.0.0.1:9980/loleaflet/d12ab86/loleaflet.html?',
+                'app' => 'writer',
+                'favIconUrl' => 'http://127.0.0.1:9980/loleaflet/d12ab86/images/x-office-document.svg',
+            ]);
+
+        $this
+            ->discoverAction('odt', 'foo')
+            ->shouldReturn(null);
+    }
+
     public function it_is_able_to_discover_the_extension(ConfigurationInterface $configuration, ClientInterface $client, Psr17Interface $psr17, RequestInterface $request, ResponseInterface $response)
     {
         $properties = [
