@@ -1,11 +1,16 @@
 {
     "name": "champs-libres/wopi-lib",
     "description": "A standard and framework agnostic PHP library to facilitate the implementation of the WOPI protocol.",
+    "license": "MIT",
     "keywords": [
         "wopi"
     ],
     "homepage": "http://github.com/champs-libres/wopi-lib",
-    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/champs-libres/wopi-lib/issues",
+        "source": "https://github.com/champs-libres/wopi-lib",
+        "docs": "https://github.com/champs-libres/wopi-lib"
+    },
     "require": {
         "php": ">= 7.4",
         "ext-SimpleXML": "*",
@@ -33,16 +38,18 @@
             "ChampsLibres\\WopiLib\\": "src/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "phpro/grumphp": true,
+            "ergebnis/composer-normalize": true
+        }
+    },
     "scripts": {
         "changelog-unreleased": "docker-compose run auto_changelog -c .auto-changelog -u",
         "changelog-version": "docker-compose run auto_changelog -c .auto-changelog -v",
         "grumphp": "./vendor/bin/grumphp run",
         "infection": "vendor/bin/infection run -j 2",
         "phpspec": "vendor/bin/phpspec run -vvv --stop-on-failure"
-    },
-    "support": {
-        "issues": "https://github.com/champs-libres/wopi-lib/issues",
-        "source": "https://github.com/champs-libres/wopi-lib",
-        "docs": "https://github.com/champs-libres/wopi-lib"
     }
 }
