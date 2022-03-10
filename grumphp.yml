@@ -3,6 +3,6 @@ imports:
 
 parameters:
     tasks.license.date_from: 2021
-    tasks.license.holder: Pol Dellaiera
+    tasks.license.holder: Champs-Libres
     extra_tasks:
         phpspec: ~
