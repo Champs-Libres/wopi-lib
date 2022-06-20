@@ -45,6 +45,8 @@ final class DocumentLockManager implements DocumentLockManagerInterface
         $item = $this->cache->getItem($this->getCacheId($document->getWopiDocId()));
 
         $item->set($lockId);
+        // according to the specs, lock should last 30M
+        $item->expiresAfter(new \DateInterval('PT31M'));
 
         return $this->cache->save($item);
     }
