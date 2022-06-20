@@ -25,7 +25,14 @@ final class DocumentLockManager implements DocumentLockManagerInterface
 
     public function deleteLock(Document $document, RequestInterface $request): bool
     {
-        return $this->cache->deleteItem($this->getCacheId($document->getWopiDocId()));
+        // instead of deleting the lock, set a short expiration time
+        // it gives a chance for concurrent request which put the file content
+        // to meet an existing lock, and avoid them to be banned
+        $item = $this->cache->getItem($this->getCacheId($document->getWopiDocId()));
+
+        $item->expiresAfter(new \DateInterval('PT10S'));
+
+        return $this->cache->save($item);
     }
 
     public function getLock(Document $document, RequestInterface $request): string
