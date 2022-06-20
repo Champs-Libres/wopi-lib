@@ -11,6 +11,7 @@ namespace ChampsLibres\WopiLib\Service;
 
 use ChampsLibres\WopiLib\Contract\Entity\Document;
 use ChampsLibres\WopiLib\Contract\Service\DocumentLockManagerInterface;
+use DateInterval;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestInterface;
 
@@ -25,7 +26,14 @@ final class DocumentLockManager implements DocumentLockManagerInterface
 
     public function deleteLock(Document $document, RequestInterface $request): bool
     {
-        return $this->cache->deleteItem($this->getCacheId($document->getWopiDocId()));
+        // instead of deleting the lock, set a short expiration time
+        // it gives a chance for concurrent request which put the file content
+        // to meet an existing lock, and avoid them to be banned
+        $item = $this->cache->getItem($this->getCacheId($document->getWopiDocId()));
+
+        $item->expiresAfter(new DateInterval('PT10S'));
+
+        return $this->cache->save($item);
     }
 
     public function getLock(Document $document, RequestInterface $request): string
@@ -45,6 +53,8 @@ final class DocumentLockManager implements DocumentLockManagerInterface
         $item = $this->cache->getItem($this->getCacheId($document->getWopiDocId()));
 
         $item->set($lockId);
+        // according to the specs, lock should last 30M
+        $item->expiresAfter(new DateInterval('PT31M'));
 
         return $this->cache->save($item);
     }
