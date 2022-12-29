@@ -47,5 +47,15 @@ interface DocumentManagerInterface
 
     public function remove(Document $document): void;
 
+    /**
+     * Write the content into the document.
+     *
+     * **Important**: any implementation should also ensure to update the version and timestamp
+     * of the Document, after writing data.
+     *
+     * @param Document $document
+     * @param array{body: string, size: int} $properties
+     * @return void
+     */
     public function write(Document $document, array $properties = []): void;
 }
