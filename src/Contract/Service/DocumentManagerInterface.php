@@ -54,8 +54,10 @@ interface DocumentManagerInterface
      * of the Document, after writing data.
      *
      * @param Document $document
-     * @param array{body: string, size: int} $properties
+     * @param array{content: string, size: int} $properties
      * @return void
      */
     public function write(Document $document, array $properties = []): void;
+
+    public function rename(Document $document, string $requestedName): void;
 }
