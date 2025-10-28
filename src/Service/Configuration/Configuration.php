@@ -32,7 +32,7 @@ final class Configuration implements ConfigurationInterface
         return array_key_exists($offset, $this->properties);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->properties[$offset];
     }
