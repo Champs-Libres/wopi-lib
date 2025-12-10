@@ -11,6 +11,8 @@
         "source": "https://github.com/champs-libres/wopi-lib",
         "docs": "https://github.com/champs-libres/wopi-lib"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
         "php": ">= 7.4",
         "ext-SimpleXML": "*",
